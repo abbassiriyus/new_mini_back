@@ -57,7 +57,7 @@ router.post('/company', async (req, res) => {
       res.json(result.rows[0]);
     } catch (error) {
       console.error('Error creating company:', error);
-      res.status(500).json({ error: 'An error occurred' });
+      res.status(500).json({ error: error.message });
     }
   });
   
@@ -69,7 +69,7 @@ router.post('/company', async (req, res) => {
       res.json(result.rows);
     } catch (error) {
       console.error('Error getting companies:', error);
-      res.status(500).json({ error: 'An error occurred' });
+      res.status(500).json({ error: error.message });
     }
   });
   
@@ -132,7 +132,7 @@ router.post('/company', async (req, res) => {
       res.json(result.rows[0]);
     } catch (error) {
       console.error('Error updating company:', error);
-      res.status(500).json({ error: 'An error occurred' });
+      res.status(500).json({ error: error.message });
     }
   });
   
@@ -148,7 +148,7 @@ router.post('/company', async (req, res) => {
       res.json({ message: 'Company deleted' });
     } catch (error) {
       console.error('Error deleting company:', error);
-      res.status(500).json({ error: 'An error occurred' });
+      res.status(500).json({ error: error.message });
     }
   });
   

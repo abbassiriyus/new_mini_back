@@ -19,7 +19,7 @@ router.post('/new', async (req, res) => {
       res.json(result.rows[0]);
     } catch (error) {
       console.error('Error creating new data:', error);
-      res.status(500).json({ error: 'An error occurred' });
+      res.status(500).json({ error: error.message });
     }
   });
   
@@ -31,7 +31,7 @@ router.post('/new', async (req, res) => {
       res.json(result.rows);
     } catch (error) {
       console.error('Error retrieving data:', error);
-      res.status(500).json({ error: 'An error occurred' });
+      res.status(500).json({ error: error.message });
     }
   });
   
@@ -54,7 +54,7 @@ router.post('/new', async (req, res) => {
       res.json(result.rows[0]);
     } catch (error) {
       console.error('Error updating data:', error);
-      res.status(500).json({ error: 'An error occurred' });
+      res.status(500).json({ error: error.message });
     }
   });
   
@@ -70,7 +70,7 @@ router.post('/new', async (req, res) => {
       res.json({ message: 'Data deleted' });
     } catch (error) {
       console.error('Error deleting data:', error);
-      res.status(500).json({ error: 'An error occurred' });
+      res.status(500).json({ error: error.message });
     }
   });
   

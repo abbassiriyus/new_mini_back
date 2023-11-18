@@ -17,7 +17,7 @@ router.post('/users', async (req, res) => {
       res.json(result.rows[0]);
     } catch (error) {
       console.error('Error creating user:', error);
-      res.status(500).json({ error: 'An error occurred' });
+      res.status(500).json({ error: error.message });
     }
   });
   
