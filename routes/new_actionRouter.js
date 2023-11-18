@@ -68,8 +68,7 @@ router.post('/new_action', async (req, res) => {
       const values = [id];
       var delete_image= await pool.query('SELECT * FROM new_action WHERE id = $1;',[id])
       delete_file(delete_image.rows[0].image)
-     var a=await pool.query(query, values);
-     console.log(a);
+     await pool.query(query, values);
       res.json({ message: 'New action deleted' });
     } catch (error) {
       console.error('Error deleting new action:', error);
