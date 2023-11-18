@@ -5,8 +5,10 @@ const fileUpload = require("express-fileupload")
 const bodyParser = require('body-parser');
 
 const users=require("./routes/usersRouter")
-
-
+const company=require('./routes/companyRouter')
+const category=require('./routes/categoryRouter')
+const news=require('./routes/newsRouter')
+const news_action=require('./routes/new_actionRouter')
 
 
 app.use(fileUpload())
@@ -17,6 +19,11 @@ app.get('/',(req,res)=>{
     res.send({message:"welcome to our api"})
 })
 app.use('/api/v1/',users)
+app.use('/api/v1/',category)
+app.use('/api/v1/',company)
+app.use('/api/v1/',news)
+app.use('/api/v1/',news_action)
+
 
 app.listen(5000, () => {
     console.log("Localhost is Running");

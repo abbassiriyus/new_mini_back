@@ -5,15 +5,15 @@ const pool = require('../db'); // Postgres bazasiga ulanish
 
 router.post('/new_action', async (req, res) => {
     try {
-      const { image, desc } = req.body;
+      const { image, desc,news_id } = req.body;
   
       const query = `
-        INSERT INTO new_action (image, "desc")
-        VALUES ($1, $2)
+        INSERT INTO new_action (image,desc,news_id)
+        VALUES ($1, $2,$3)
         RETURNING *;
       `;
   
-      const values = [image, desc];
+      const values = [image, desc,news_id];
   
       const result = await pool.query(query, values);
       res.json(result.rows[0]);
@@ -39,16 +39,16 @@ router.post('/new_action', async (req, res) => {
   router.put('/new_action/:id', async (req, res) => {
     try {
       const { id } = req.params;
-      const { image, desc } = req.body;
+      const { image, desc,news_id } = req.body;
   
       const query = `
         UPDATE new_action
-        SET image = $1, "desc" = $2, time_update = CURRENT_TIMESTAMP
-        WHERE id = $3
+        SET image = $1, "desc" = $2,news_id=$3 time_update = CURRENT_TIMESTAMP
+        WHERE id = $4
         RETURNING *;
       `;
   
-      const values = [image, desc, id];
+      const values = [image, desc,news_id, id];
   
       const result = await pool.query(query, values);
       res.json(result.rows[0]);
