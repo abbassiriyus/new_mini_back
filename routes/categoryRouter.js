@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db'); // Postgres bazasiga ulanish
+const verifyToken = require('../middleware/auth');
 
 
-router.post('/category', async (req, res) => {
+router.post('/category', verifyToken, async (req, res) => {
     try {
       const { title } = req.body;
   
@@ -36,7 +37,7 @@ router.post('/category', async (req, res) => {
   });
   
   // Update a category
-  router.put('/category/:id', async (req, res) => {
+  router.put('/category/:id',verifyToken, async (req, res) => {
     try {
       const { id } = req.params;
       const { title } = req.body;
@@ -59,7 +60,7 @@ router.post('/category', async (req, res) => {
   });
   
   // Delete a category
-  router.delete('/category/:id', async (req, res) => {
+  router.delete('/category/:id',verifyToken, async (req, res) => {
     try {
       const { id } = req.params;
   

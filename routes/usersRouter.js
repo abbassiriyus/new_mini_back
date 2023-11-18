@@ -1,9 +1,37 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db'); // Postgres bazasiga ulanish
+const verifyToken = require('../middleware/auth');
+
+
+
+
+// Authenticate user and generate token
+router.post('/login', async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    // Check if the user exists in the database
+    const query = 'SELECT * FROM users WHERE username = $1 AND password = $2;';
+    const values = [username, password];
+    const result = await db.query(query, values);
+
+    if (result.rows.length === 0) {
+      return res.status(401).json({ error: 'Invalid username or password' });
+    }
+
+    // User is authenticated, generate a token
+    const token = jwt.sign({ userId: result.rows[0].id }, 'your_secret_key');
+
+    res.json({ token });
+  } catch (error) {
+    console.error('Error authenticating user:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Kullanıcı ekleme (Create)
-router.post('/users', async (req, res) => {
+router.post('/users',verifyToken, async (req, res) => {
     try {
       const { username, password } = req.body;
   
@@ -34,7 +62,7 @@ router.post('/users', async (req, res) => {
   });
   
   // Kullanıcıyı güncelleme (Update)
-  router.put('/users/:id', async (req, res) => {
+  router.put('/users/:id',verifyToken, async (req, res) => {
     try {
       const { id } = req.params;
       const { username, password } = req.body;
@@ -57,7 +85,7 @@ router.post('/users', async (req, res) => {
   });
   
   // Kullanıcıyı silme (Delete)
-  router.delete('/users/:id', async (req, res) => {
+  router.delete('/users/:id',verifyToken, async (req, res) => {
     try {
       const { id } = req.params;
   

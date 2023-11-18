@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db'); // Postgres bazasiga ulanish
+const verifyToken = require('../middleware/auth');
 
 // Yeni veri ekleme (Create)
-router.post('/new', async (req, res) => {
+router.post('/new',verifyToken, async (req, res) => {
     try {
       const { category_id, title, look, telegram, facebook, okrug } = req.body;
   
@@ -36,7 +37,7 @@ router.post('/new', async (req, res) => {
   });
   
   // Veriyi güncelleme (Update)
-  router.put('/new/:id', async (req, res) => {
+  router.put('/new/:id',verifyToken, async (req, res) => {
     try {
       const { id } = req.params;
       const { category_id, title, look, telegram, facebook, okrug } = req.body;
@@ -59,7 +60,7 @@ router.post('/new', async (req, res) => {
   });
   
   // Veriyi silme (Delete)
-  router.delete('/new/:id', async (req, res) => {
+  router.delete('/new/:id',verifyToken, async (req, res) => {
     try {
       const { id } = req.params;
   

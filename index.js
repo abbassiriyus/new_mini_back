@@ -8,7 +8,8 @@ const users=require("./routes/usersRouter")
 const company=require('./routes/companyRouter')
 const category=require('./routes/categoryRouter')
 const news=require('./routes/newsRouter')
-const news_action=require('./routes/new_actionRouter')
+const news_action=require('./routes/new_actionRouter');
+const createUser = require("./middleware/user_create");
 
 
 app.use(fileUpload())
@@ -16,6 +17,7 @@ app.use(cors())
 app.use(express.static('./media'))
 app.use(bodyParser.json());
 app.get('/',(req,res)=>{
+    createUser()
     res.send({message:"welcome to our api"})
 })
 app.use('/api/v1/',users)

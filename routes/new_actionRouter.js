@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../db'); // Postgres bazasiga ulanish
 const { upload_file, delete_file, put_file } = require('../middleware/file_upload');
+const verifyToken = require('../middleware/auth');
 
 
-router.post('/new_action', async (req, res) => {
+router.post('/new_action',verifyToken, async (req, res) => {
     try {
       const { desc,news_id } = req.body;
   var image=upload_file(req)
@@ -37,7 +38,7 @@ router.post('/new_action', async (req, res) => {
   });
   
   // Update a new action
-  router.put('/new_action/:id', async (req, res) => {
+  router.put('/new_action/:id',verifyToken, async (req, res) => {
     try {
       const { id } = req.params;
       const { desc ,news_id } = req.body;
@@ -61,7 +62,7 @@ router.post('/new_action', async (req, res) => {
   });
   
   // Delete a new action
-  router.delete('/new_action/:id', async (req, res) => {
+  router.delete('/new_action/:id',verifyToken, async (req, res) => {
     try {
       const { id } = req.params;
       const query = 'DELETE FROM new_action WHERE id = $1;';
