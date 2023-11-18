@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db'); // Postgres bazasiga ulanish
-const { upload_file } = require('../middleware/file_upload');
+const { upload_file, delete_file, put_file } = require('../middleware/file_upload');
 
 
 router.post('/new_action', async (req, res) => {
@@ -40,7 +40,7 @@ router.post('/new_action', async (req, res) => {
   router.put('/new_action/:id', async (req, res) => {
     try {
       const { id } = req.params;
-      const { image, desc ,news_id } = req.body;
+      const { desc ,news_id } = req.body;
   
       const query = `
         UPDATE new_action
@@ -48,7 +48,8 @@ router.post('/new_action', async (req, res) => {
         WHERE id = $4
         RETURNING *;
       `;
-  
+      var image_file= await pool.query('SELECT * FROM new_action WHERE id = $1;',[id])
+     var image=put_file(image_file.rows[0].image,req)
       const values = [image, desc ,news_id, id];
   
       const result = await pool.query(query, values);
@@ -63,11 +64,10 @@ router.post('/new_action', async (req, res) => {
   router.delete('/new_action/:id', async (req, res) => {
     try {
       const { id } = req.params;
-  
       const query = 'DELETE FROM new_action WHERE id = $1;';
       const values = [id];
-      var delete_image= await pool.query('SELECT FROM new_action WHERE id = $1;')
-      delete_file(delete_image[0].image)
+      var delete_image= await pool.query('SELECT * FROM new_action WHERE id = $1;',[id])
+      delete_file(delete_image.rows[0].image)
      var a=await pool.query(query, values);
      console.log(a);
       res.json({ message: 'New action deleted' });

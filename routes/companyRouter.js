@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db'); // Postgres bazasiga ulanish
+const { put_file, upload_file, delete_file } = require('../middleware/file_upload');
 
 router.post('/company', async (req, res) => {
     try {
       const {
-        image,
         phone1,
         phone2,
         instagram,
@@ -18,7 +18,7 @@ router.post('/company', async (req, res) => {
         ok,
         email,
       } = req.body;
-  
+      var image=upload_file(req)
       const query = `
         INSERT INTO company (
           image,
@@ -78,7 +78,6 @@ router.post('/company', async (req, res) => {
     try {
       const { id } = req.params;
       const {
-        image,
         phone1,
         phone2,
         instagram,
@@ -91,7 +90,8 @@ router.post('/company', async (req, res) => {
         ok,
         email,
       } = req.body;
-  
+      var image_file= await pool.query('SELECT * FROM new_action WHERE id = $1;',[id])
+      var image=put_file(image_file.rows[0].image,req)
       const query = `
         UPDATE company
         SET
@@ -140,7 +140,8 @@ router.post('/company', async (req, res) => {
   router.delete('/company/:id', async (req, res) => {
     try {
       const { id } = req.params;
-  
+      var delete_image= await pool.query('SELECT * FROM new_action WHERE id = $1;',[id])
+      delete_file(delete_image.rows[0].image)
       const query = 'DELETE FROM company WHERE id = $1;';
       const values = [id];
   
