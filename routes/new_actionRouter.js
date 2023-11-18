@@ -1,14 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db'); // Postgres bazasiga ulanish
+const { upload_file } = require('../middleware/file_upload');
 
 
 router.post('/new_action', async (req, res) => {
     try {
-      const { image, desc,news_id } = req.body;
-  
+      const { desc,news_id } = req.body;
+  var image=upload_file(req)
       const query = `
-        INSERT INTO new_action (image,desc,news_id)
+        INSERT INTO new_action (image,"desc",news_id)
         VALUES ($1, $2,$3)
         RETURNING *;
       `;
@@ -39,7 +40,7 @@ router.post('/new_action', async (req, res) => {
   router.put('/new_action/:id', async (req, res) => {
     try {
       const { id } = req.params;
-      const { image, desc,news_id } = req.body;
+      const { image, desc ,news_id } = req.body;
   
       const query = `
         UPDATE new_action
@@ -48,7 +49,7 @@ router.post('/new_action', async (req, res) => {
         RETURNING *;
       `;
   
-      const values = [image, desc,news_id, id];
+      const values = [image, desc ,news_id, id];
   
       const result = await pool.query(query, values);
       res.json(result.rows[0]);
@@ -65,8 +66,10 @@ router.post('/new_action', async (req, res) => {
   
       const query = 'DELETE FROM new_action WHERE id = $1;';
       const values = [id];
-  
-      await pool.query(query, values);
+      var delete_image= await pool.query('SELECT FROM new_action WHERE id = $1;')
+      delete_file(delete_image[0].image)
+     var a=await pool.query(query, values);
+     console.log(a);
       res.json({ message: 'New action deleted' });
     } catch (error) {
       console.error('Error deleting new action:', error);
