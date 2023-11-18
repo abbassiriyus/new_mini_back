@@ -14,7 +14,7 @@ router.post('/login', async (req, res) => {
     // Check if the user exists in the database
     const query = 'SELECT * FROM users WHERE username = $1 AND password = $2;';
     const values = [username, password];
-    const result = await db.query(query, values);
+    const result = await pool.query(query, values);
 
     if (result.rows.length === 0) {
       return res.status(401).json({ error: 'Invalid username or password' });
@@ -59,7 +59,7 @@ router.post('/users',verifyToken, async (req, res) => {
       console.error('Error retrieving users:', error);
       res.status(500).json({ error: error.message });
     }
-  });
+  }); 
   
   // Kullanıcıyı güncelleme (Update)
   router.put('/users/:id',verifyToken, async (req, res) => {
