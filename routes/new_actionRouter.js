@@ -41,7 +41,7 @@ router.post('/new_action',verifyToken, async (req, res) => {
   router.put('/new_action/:id',verifyToken, async (req, res) => {
     try {
       const { id } = req.params;
-      const { desc ,news_id } = req.body;
+      const { desc,news_id } = req.body;
   
       const query = `
         UPDATE new_action
