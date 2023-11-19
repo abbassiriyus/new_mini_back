@@ -45,7 +45,7 @@ router.post('/new_action',verifyToken, async (req, res) => {
   
       const query = `
         UPDATE new_action
-        SET image = $1, "desc" = $2,news_id=$3 time_update = CURRENT_TIMESTAMP
+        SET image = $1,"desc" = $2,news_id=$3, time_update = CURRENT_TIMESTAMP
         WHERE id = $4
         RETURNING *;
       `;
