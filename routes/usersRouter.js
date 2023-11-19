@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../db'); // Postgres bazasiga ulanish
 const verifyToken = require('../middleware/auth');
+const jwt = require('jsonwebtoken');
 
 
 
