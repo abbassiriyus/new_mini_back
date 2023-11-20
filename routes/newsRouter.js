@@ -35,7 +35,7 @@ router.post('/new',verifyToken, async (req, res) => {
 for (let  i = 0;  i < result.rows.length;  i++) {
   result.rows[i].image=''
   result.rows[i].actions=[]
-for (let j = 0; j < result.rows.length; j++) {
+for (let j = 0; j < result1.rows.length; j++) {
 if(result.rows[i].id===result1.rows[j].news_id){
   result.rows[i].image=result1.rows[j].image
   result.rows[i].actions.push(result1.rows[j])
