@@ -6,15 +6,15 @@ const verifyToken = require('../middleware/auth');
 // Yeni veri ekleme (Create)
 router.post('/new',verifyToken, async (req, res) => {
     try {
-      const { category_id, title, look, telegram, facebook, okrug } = req.body;
+      const { category_id, title,  telegram, facebook, okrug } = req.body;
   
       const query = `
-        INSERT INTO new (category_id, title, look, telegram, facebook, okrug)
-        VALUES ($1, $2, $3, $4, $5, $6)
+        INSERT INTO new (category_id, title,  telegram, facebook, okrug)
+        VALUES ($1, $2, $3, $4, $5)
         RETURNING *;
       `;
   
-      const values = [category_id, title, look, telegram, facebook, okrug];
+      const values = [category_id, title,  telegram, facebook, okrug];
   
       const result = await pool.query(query, values);
       res.json(result.rows[0]);
@@ -29,6 +29,23 @@ router.post('/new',verifyToken, async (req, res) => {
     try {
       const query = 'SELECT * FROM new;';
       const result = await pool.query(query);
+      const query1 = 'SELECT * FROM new_action;';
+      const result1 = await pool.query(query1);
+
+for (let  i = 0;  i < result.rows.length;  i++) {
+  result.rows[i].image=''
+  result.rows[i].actions=[]
+for (let j = 0; j < result.rows.length; j++) {
+if(result.rows[i].id===result1.rows[j].news_id){
+  result.rows[i].image=result1.rows[j].image
+  result.rows[i].actions.push(result1.rows[j])
+}
+}  
+}
+
+
+
+
       res.json(result.rows);
     } catch (error) {
       console.error('Error retrieving data:', error);
