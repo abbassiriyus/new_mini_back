@@ -75,7 +75,7 @@ router.post('/company',verifyToken, async (req, res) => {
   });
   
   // Update a company
-  router.put('/company/:id',verifyToken, async (req, res) => {
+  router.put('/company/:id', async (req, res) => {
     try {
       const { id } = req.params;
       const {
@@ -91,8 +91,12 @@ router.post('/company',verifyToken, async (req, res) => {
         ok,
         email,
       } = req.body;
-      var image_file= await pool.query('SELECT * FROM new_action WHERE id = $1;',[id])
+
+      var image_file= await pool.query('SELECT * FROM company WHERE id = $1;',[id])
+
+      console.log(id);
       var image=put_file(image_file.rows[0].image,req)
+      
       const query = `
         UPDATE company
         SET
